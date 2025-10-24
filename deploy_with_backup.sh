@@ -36,7 +36,10 @@ echo "切换到main分支..."
 git checkout main > /dev/null
 
 echo "同步最新更改..."
-git pull origin main > /dev/null 2>&1 || echo "注意：无法从远程拉取更改，可能远程没有main分支或没有网络连接"
+git pull origin main > /dev/null 2>&1 || {
+    echo "注意：无法从远程拉取更改，可能远程没有main分支或没有网络连接"
+    echo "继续执行后续操作..."
+}
 
 # 提交源代码到source分支
 echo "提交源代码到source分支..."
