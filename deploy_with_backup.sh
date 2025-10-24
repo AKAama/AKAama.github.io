@@ -10,8 +10,8 @@ echo "Hexo博客一键部署工具"
 echo "========================================"
 
 # 获取提交信息
-read -p "请输入提交信息 (默认: 站点更新)：" commit_msg
-commit_msg=${commit_msg:-"站点更新"}
+read -p "请输入提交信息 (默认: 更新)：" commit_msg
+commit_msg=${commit_msg:-"更新"}
 
 # 检查git环境
 echo "检查Git环境..."
