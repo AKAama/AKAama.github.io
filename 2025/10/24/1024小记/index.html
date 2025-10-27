@@ -92,6 +92,24 @@
 <p>那时，姑爹爹觉得我对电脑很感兴趣，便让我在触控板上写下一行字。我问他该写什么，他说：“写你想写的。”于是我写下了：“我想学电脑”。旁边还配上了我的照片，可惜岁月久远，那张纸早已找不到了。不过，也许现在的生活，正是那张纸上愿望的延续。</p>
 
         </div>
+        <!-- 分享按钮 -->
+        <div class="post-share">
+            <a href="javascript:void(0)" class="share-weibo" onclick="shareToWeibo()">分享到微博</a>
+            <script>
+                function shareToWeibo() {
+                    var url = window.location.href;
+                    var title = document.title;
+                    var summary = "今天是2025年10月24日，是程序员节，有时在想，我好像真的成为了小时候想成为的人。
+最近的抖音总是能在一些美女视频下面看见有人评论：你在看这个视频的时候，有没有想过，小时候的梦想是成为一名科学家。...";
+                    var weiboUrl = 'https://service.weibo.com/share/share.php?' +
+                        'url=' + encodeURIComponent(url) +
+                        '&title=' + encodeURIComponent(title) +
+                        '&pic=' + encodeURIComponent('') +
+                        '&appkey=';
+                    window.open(weiboUrl, '_blank', 'width=800,height=600');
+                }
+            </script>
+        </div>
     
 <!-- tags -->
 

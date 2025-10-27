@@ -31,10 +31,6 @@ a
     color: var(--font-color-3);
 }
 
-.paper
-{
-    /* padding: 4vw; */
-}
 .paper-main
 {
     width: 100%;
@@ -386,4 +382,26 @@ a
 .tags .fix,.tags .bugfix {
     --color: #FF4772;
     color: #fff
+}
+
+/* 微博分享按钮样式 */
+.post-share {
+    margin: 2em 0;
+    text-align: center;
+}
+
+.share-weibo {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #e6162d;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.share-weibo:hover {
+    background-color: #c41228;
+    color: white;
 }

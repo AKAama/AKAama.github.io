@@ -96,6 +96,23 @@
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 
         </div>
+        <!-- 分享按钮 -->
+        <div class="post-share">
+            <a href="javascript:void(0)" class="share-weibo" onclick="shareToWeibo()">分享到微博</a>
+            <script>
+                function shareToWeibo() {
+                    var url = window.location.href;
+                    var title = document.title;
+                    var summary = "Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any pro...";
+                    var weiboUrl = 'https://service.weibo.com/share/share.php?' +
+                        'url=' + encodeURIComponent(url) +
+                        '&title=' + encodeURIComponent(title) +
+                        '&pic=' + encodeURIComponent('') +
+                        '&appkey=';
+                    window.open(weiboUrl, '_blank', 'width=800,height=600');
+                }
+            </script>
+        </div>
     
 <!-- tags -->
 
