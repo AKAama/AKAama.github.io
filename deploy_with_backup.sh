@@ -2,6 +2,7 @@
 
 # Hexo博客一键部署脚本
 # 功能：提交源代码到source分支，同时部署博客到main分支
+# 优化：自动处理子模块(theme)的更改提交
 
 set -e
 
@@ -41,12 +42,32 @@ git pull origin main > /dev/null 2>&1 || {
     echo "继续执行后续操作..."
 }
 
-# 提交源代码到source分支
+# 处理子模块(theme)更改
+echo "检查并处理子模块更改..."
+# 进入主题目录处理子模块更改
+if [ -d "themes/hexo-theme-ZenMind/.git" ]; then
+    echo "检测到主题子模块，处理其更改..."
+    (cd themes/hexo-theme-ZenMind && \
+     git add . && \
+     if git diff-index --quiet HEAD --; then
+         echo "主题子模块没有更改，跳过提交"
+     else
+         git commit -m "主题更新: $commit_msg" && \
+         git push
+         echo "✅ 主题子模块更改已成功提交！"
+     fi
+    ) || echo "⚠️  主题子模块提交失败，可能需要手动处理"
+else
+    echo "未检测到主题子模块，继续执行..."
+fi
+
+# 提交源代码到source分支，包括子模块引用更新
 echo "提交源代码到source分支..."
 git add .
+git add -u # 确保捕获子模块引用的更改
 git commit -m "$commit_msg"
 git push origin main:source > /dev/null
-echo "✅ 源代码已成功提交到source分支！"
+echo "✅ 源代码和子模块引用已成功提交到source分支！"
 
 # 部署Hexo博客
 echo "开始部署Hexo博客..."
