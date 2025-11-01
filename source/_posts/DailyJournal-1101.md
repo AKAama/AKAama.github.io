@@ -4,4 +4,5 @@ date: 2025-11-01 20:00:23
 tags:
 ---
 出门锻炼，开启自律100天打卡，距离过年还有107天。
-<video src="./IMG_7454.mov" controls></video>
+最近好像很流行那个企鹅表情包，看我的水壶是不是很像
+<video src="./IMG_7454.mov" controls style="max-width: 100%; height: auto; margin: 1em 0; border-radius: 8px;"></video>
