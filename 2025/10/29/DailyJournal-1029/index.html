@@ -69,56 +69,44 @@
                 
                 <div class="post-main">
     
-        <div class="post-main-title">
-            DailyJournal_1029
+    <!-- 引入必要的CSS和JS库 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script>
+
+        <div class="post-main-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <h1 style="margin: 0; flex: 1; min-width: 200px;">DailyJournal_1029</h1>
+        </div>
+        <!-- 分享按钮区 -->
+        <div class="share-component" 
+            data-sites="weibo,facebook"
+            data-weibo-title="DailyJournal_1029"
+            data-url="https://hexo.ismyh.cn/2025/10/29/DailyJournal-1029/">
         </div>
         <div class="post-meta">
             2025-10-29 23:38:08 ｜ 
             
         </div>
         <!-- 圆角分类 -->
-        <!-- <div class="tags"> -->
-            <!--  -->
-        <!-- </div> -->
+        <div class="tags">
+            
+        </div>
         <div class="post-md">
             <p>今天早上刚上班就被别的部门的给气死我，一个项目经理自己也不负责，死到临头就开始拉群，拉领导<br>真的很想在群里破口大骂，但是还是没有底气，万一真被针对了呢，这就是生活吗。</p>
 
         </div>
     
-    <!-- 分享按钮 -->
-    <div class="post-share">
-        <a href="javascript:void(0)" class="share-weibo" onclick="shareToWeibo()">分享到微博</a>
-        <script>
-            function shareToWeibo() {
-                var url = window.location.href;
-                var title = document.title;
-                var summary = "今天早上刚上班就被别的部门的给气死我，一个项目经理自己也不负责，死到临头就开始拉群，拉领导真的很想在群里破口大骂，但是还是没有底气，万一真被针对了呢，这就是生活吗。
-...";
-                var weiboUrl = 'https://service.weibo.com/share/share.php?'+ 
-                    'url=' + encodeURIComponent(url) +
-                    '&title=' + encodeURIComponent(title) +
-                    '&pic=' + encodeURIComponent('') +
-                    '&appkey=';
-                window.open(weiboUrl, '_blank', 'width=800,height=600');
-            }
-        </script>
-    </div>
-    
     <!-- 评论系统 -->
-    <div class="post-comments" style="margin-top: 2em;">
-        <h3 style="text-align: center; margin-bottom: 1em;">评论区</h3>
-        <!-- 配置说明：
-             1. 请将 repo 参数修改为你的 GitHub 用户名/仓库名
-             2. 确保该仓库是公开的
-             3. 访问 https://github.com/apps/utterances 并授权给你的仓库
-        -->
-        <script src="https://utteranc.es/client.js"
-                repo="AKAama/Comments"
-                issue-term="pathname"
-                theme="github-light"
-                crossorigin="anonymous"
-                async>
-        </script>
+    <div class="post-comments" style="width: 100%; box-sizing: border-box; margin-top: 3em; padding: 1.5em; background: #f9f9f9; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        <h3 style="text-align: center; margin-bottom: 1.5em; color: #333; font-weight: 600;">评论区</h3>
+        <div style="max-width: 100%; overflow: hidden; border-radius: 4px;">
+            <script src="https://utteranc.es/client.js"
+                    repo="AKAama/Comments"
+                    issue-term="pathname"
+                    theme="github-light"
+                    crossorigin="anonymous"
+                    async>
+            </script>
+        </div>
     </div>
     
 <!-- tags -->

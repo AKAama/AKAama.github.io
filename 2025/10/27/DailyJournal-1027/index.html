@@ -69,17 +69,27 @@
                 
                 <div class="post-main">
     
-        <div class="post-main-title">
-            DailyJournal_1027
+    <!-- 引入必要的CSS和JS库 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script>
+
+        <div class="post-main-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <h1 style="margin: 0; flex: 1; min-width: 200px;">DailyJournal_1027</h1>
+        </div>
+        <!-- 分享按钮区 -->
+        <div class="share-component" 
+            data-sites="weibo,facebook"
+            data-weibo-title="DailyJournal_1027"
+            data-url="https://hexo.ismyh.cn/2025/10/27/DailyJournal-1027/">
         </div>
         <div class="post-meta">
             2025-10-27 23:31:02 ｜ 
             
         </div>
         <!-- 圆角分类 -->
-        <!-- <div class="tags"> -->
-            <!--  -->
-        <!-- </div> -->
+        <div class="tags">
+            
+        </div>
         <div class="post-md">
             <p>昨天的孙燕姿演唱会，简直太炸裂了。整整30首歌，我几乎每一首都在用生命跟着唱，嗓子到最后都要报废了，不知道有没有吓到周围的歌迷。<br>这是我人生第一次看演唱会，老哥还调侃说我这起点也太高了。结束那一刻，整个人都还飘在现场的灯光和和声里，回到家躺在床上，心还在震，脑子里全是《我不难过》和《逆光》的旋律。直到凌晨三点，我都还没从那种激动里缓过来。于是今天果断请假，多睡了一会，算是给昨晚的自己一个喘息。</p>
 <p>现场的氛围真的太好了。昨天是今年的收官场，最后 encore 的时候，《开始懂了》前奏一响，全场尖叫。那一刻，真的是一种被温柔击中的救赎感。后来才知道，前面几站都没唱这首，原来燕姿是想留到最后一场啊。</p>
@@ -96,39 +106,18 @@
 
         </div>
     
-    <!-- 分享按钮 -->
-    <div class="post-share">
-        <a href="javascript:void(0)" class="share-weibo" onclick="shareToWeibo()">分享到微博</a>
-        <script>
-            function shareToWeibo() {
-                var url = window.location.href;
-                var title = document.title;
-                var summary = "昨天的孙燕姿演唱会，简直太炸裂了。整整30首歌，我几乎每一首都在用生命跟着唱，嗓子到最后都要报废了，不知道有没有吓到周围的歌迷。这是我人生第一次看演唱会，老哥还调侃说我这起点也太高了。结束那一刻，整个...";
-                var weiboUrl = 'https://service.weibo.com/share/share.php?'+ 
-                    'url=' + encodeURIComponent(url) +
-                    '&title=' + encodeURIComponent(title) +
-                    '&pic=' + encodeURIComponent('') +
-                    '&appkey=';
-                window.open(weiboUrl, '_blank', 'width=800,height=600');
-            }
-        </script>
-    </div>
-    
     <!-- 评论系统 -->
-    <div class="post-comments" style="margin-top: 2em;">
-        <h3 style="text-align: center; margin-bottom: 1em;">评论区</h3>
-        <!-- 配置说明：
-             1. 请将 repo 参数修改为你的 GitHub 用户名/仓库名
-             2. 确保该仓库是公开的
-             3. 访问 https://github.com/apps/utterances 并授权给你的仓库
-        -->
-        <script src="https://utteranc.es/client.js"
-                repo="AKAama/Comments"
-                issue-term="pathname"
-                theme="github-light"
-                crossorigin="anonymous"
-                async>
-        </script>
+    <div class="post-comments" style="width: 100%; box-sizing: border-box; margin-top: 3em; padding: 1.5em; background: #f9f9f9; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        <h3 style="text-align: center; margin-bottom: 1.5em; color: #333; font-weight: 600;">评论区</h3>
+        <div style="max-width: 100%; overflow: hidden; border-radius: 4px;">
+            <script src="https://utteranc.es/client.js"
+                    repo="AKAama/Comments"
+                    issue-term="pathname"
+                    theme="github-light"
+                    crossorigin="anonymous"
+                    async>
+            </script>
+        </div>
     </div>
     
 <!-- tags -->

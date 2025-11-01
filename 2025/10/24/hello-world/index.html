@@ -69,17 +69,27 @@
                 
                 <div class="post-main">
     
-        <div class="post-main-title">
-            Hello World
+    <!-- 引入必要的CSS和JS库 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script>
+
+        <div class="post-main-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <h1 style="margin: 0; flex: 1; min-width: 200px;">Hello World</h1>
+        </div>
+        <!-- 分享按钮区 -->
+        <div class="share-component" 
+            data-sites="weibo,facebook"
+            data-weibo-title="Hello World"
+            data-url="https://hexo.ismyh.cn/2025/10/24/hello-world/">
         </div>
         <div class="post-meta">
             2025-10-24 00:00:00 ｜ 
             
         </div>
         <!-- 圆角分类 -->
-        <!-- <div class="tags"> -->
-            <!--  -->
-        <!-- </div> -->
+        <div class="tags">
+            
+        </div>
         <div class="post-md">
             <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
@@ -97,39 +107,18 @@
 
         </div>
     
-    <!-- 分享按钮 -->
-    <div class="post-share">
-        <a href="javascript:void(0)" class="share-weibo" onclick="shareToWeibo()">分享到微博</a>
-        <script>
-            function shareToWeibo() {
-                var url = window.location.href;
-                var title = document.title;
-                var summary = "Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any pro...";
-                var weiboUrl = 'https://service.weibo.com/share/share.php?'+ 
-                    'url=' + encodeURIComponent(url) +
-                    '&title=' + encodeURIComponent(title) +
-                    '&pic=' + encodeURIComponent('') +
-                    '&appkey=';
-                window.open(weiboUrl, '_blank', 'width=800,height=600');
-            }
-        </script>
-    </div>
-    
     <!-- 评论系统 -->
-    <div class="post-comments" style="margin-top: 2em;">
-        <h3 style="text-align: center; margin-bottom: 1em;">评论区</h3>
-        <!-- 配置说明：
-             1. 请将 repo 参数修改为你的 GitHub 用户名/仓库名
-             2. 确保该仓库是公开的
-             3. 访问 https://github.com/apps/utterances 并授权给你的仓库
-        -->
-        <script src="https://utteranc.es/client.js"
-                repo="AKAama/Comments"
-                issue-term="pathname"
-                theme="github-light"
-                crossorigin="anonymous"
-                async>
-        </script>
+    <div class="post-comments" style="width: 100%; box-sizing: border-box; margin-top: 3em; padding: 1.5em; background: #f9f9f9; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        <h3 style="text-align: center; margin-bottom: 1.5em; color: #333; font-weight: 600;">评论区</h3>
+        <div style="max-width: 100%; overflow: hidden; border-radius: 4px;">
+            <script src="https://utteranc.es/client.js"
+                    repo="AKAama/Comments"
+                    issue-term="pathname"
+                    theme="github-light"
+                    crossorigin="anonymous"
+                    async>
+            </script>
+        </div>
     </div>
     
 <!-- tags -->

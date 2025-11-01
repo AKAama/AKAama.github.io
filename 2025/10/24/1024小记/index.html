@@ -70,8 +70,18 @@
                 
                 <div class="post-main">
     
-        <div class="post-main-title">
-            1024小记
+    <!-- 引入必要的CSS和JS库 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script>
+
+        <div class="post-main-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <h1 style="margin: 0; flex: 1; min-width: 200px;">1024小记</h1>
+        </div>
+        <!-- 分享按钮区 -->
+        <div class="share-component" 
+            data-sites="weibo,facebook"
+            data-weibo-title="1024小记"
+            data-url="https://hexo.ismyh.cn/2025/10/24/1024小记/">
         </div>
         <div class="post-meta">
             2025-10-24 20:24:32 ｜ 
@@ -80,11 +90,11 @@
             
         </div>
         <!-- 圆角分类 -->
-        <!-- <div class="tags"> -->
-            <!--  -->
-                <!-- <a href="/categories/%E5%B0%8F%E8%AE%B0/">小记</a> -->
-            <!--  -->
-        <!-- </div> -->
+        <div class="tags">
+            
+                <a href="/categories/%E5%B0%8F%E8%AE%B0/">小记</a>
+            
+        </div>
         <div class="post-md">
             <p>今天是2025年10月24日，是程序员节，有时在想，我好像真的成为了小时候想成为的人。</p>
 <p>最近的抖音总是能在一些美女视频下面看见有人评论：你在看这个视频的时候，有没有想过，小时候的梦想是成为一名科学家。我自己小时候并没有这样被问过，好像也没有哪次的班会讨论过这个话题，但我确实心底曾想过。那个时候就已经很流行说“电脑会取代人类”，我也想着，如果电脑真的取代了人类，那我当一个修电脑的，岂不是不愁找工作啦？对于当时的我来说，修电脑和程序员好像是差不多的。</p>
@@ -93,40 +103,18 @@
 
         </div>
     
-    <!-- 分享按钮 -->
-    <div class="post-share">
-        <a href="javascript:void(0)" class="share-weibo" onclick="shareToWeibo()">分享到微博</a>
-        <script>
-            function shareToWeibo() {
-                var url = window.location.href;
-                var title = document.title;
-                var summary = "今天是2025年10月24日，是程序员节，有时在想，我好像真的成为了小时候想成为的人。
-最近的抖音总是能在一些美女视频下面看见有人评论：你在看这个视频的时候，有没有想过，小时候的梦想是成为一名科学家。...";
-                var weiboUrl = 'https://service.weibo.com/share/share.php?'+ 
-                    'url=' + encodeURIComponent(url) +
-                    '&title=' + encodeURIComponent(title) +
-                    '&pic=' + encodeURIComponent('') +
-                    '&appkey=';
-                window.open(weiboUrl, '_blank', 'width=800,height=600');
-            }
-        </script>
-    </div>
-    
     <!-- 评论系统 -->
-    <div class="post-comments" style="margin-top: 2em;">
-        <h3 style="text-align: center; margin-bottom: 1em;">评论区</h3>
-        <!-- 配置说明：
-             1. 请将 repo 参数修改为你的 GitHub 用户名/仓库名
-             2. 确保该仓库是公开的
-             3. 访问 https://github.com/apps/utterances 并授权给你的仓库
-        -->
-        <script src="https://utteranc.es/client.js"
-                repo="AKAama/Comments"
-                issue-term="pathname"
-                theme="github-light"
-                crossorigin="anonymous"
-                async>
-        </script>
+    <div class="post-comments" style="width: 100%; box-sizing: border-box; margin-top: 3em; padding: 1.5em; background: #f9f9f9; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        <h3 style="text-align: center; margin-bottom: 1.5em; color: #333; font-weight: 600;">评论区</h3>
+        <div style="max-width: 100%; overflow: hidden; border-radius: 4px;">
+            <script src="https://utteranc.es/client.js"
+                    repo="AKAama/Comments"
+                    issue-term="pathname"
+                    theme="github-light"
+                    crossorigin="anonymous"
+                    async>
+            </script>
+        </div>
     </div>
     
 <!-- tags -->
