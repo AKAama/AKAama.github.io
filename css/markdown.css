@@ -474,6 +474,19 @@
     font-size: 1.1rem;
 }
 
+.post-md .guestbook-board .utterances {
+    width: 100%;
+    max-width: 100%;
+}
+
+.post-md .guestbook-board iframe.utterances-frame {
+    width: 100%;
+    height: auto;
+    min-height: 520px;
+    max-height: none;
+    margin: 0;
+}
+
 @media (max-width: 520px) {
     .post-md .guestbook-hero h1 {
         font-size: 2rem;
