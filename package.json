@@ -1,12 +1,12 @@
 {
-  "name": "hexo-site",
+  "name": "alex-life-log",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "build": "hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
-    "server": "hexo server"
+    "server": "hexo clean --config _config.yml,_config.local.yml && hexo server --config _config.yml,_config.local.yml"
   },
   "hexo": {
     "version": "8.0.0"

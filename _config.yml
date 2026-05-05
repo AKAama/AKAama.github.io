@@ -3,13 +3,13 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle: yhma
-description: ''
-keywords:
+title: Alex 的生活日志
+subtitle: 记录一些日常、工作和继续往前走的瞬间
+description: Alex_yehui 的个人博客，写日常、工作、骑行、音乐和生活里的小情绪。
+keywords: 日记,生活记录,个人博客,骑行,工作日常
 author: Alex_yehui
-language: en
-timezone: ''
+language: zh-CN
+timezone: Asia/Shanghai
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
@@ -68,7 +68,7 @@ index_generator:
   order_by: -date
 
 # Category & Tag
-default_category: uncategorized
+default_category: 日常
 category_map:
 tag_map:
 
