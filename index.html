@@ -60,6 +60,15 @@
                 <div class="post-list">
     
     <div class="post">
+        <a class="post-title" href="/2026/11/09/DailyJournal-1109-2/">MySQL延迟关联的原理讲解与实例</a>
+        <div class="post-except">
+            延迟关联的本质是把「回表」这一动作推迟到最后：内层子查询只在索引上完成扫描、排序和分页，只产出 10 个主键；外层再拿这 10 个主键做等值查询取整行，于是回表从 100 万次降到 10 次。问题出在哪里：limit 1000000, 10 并没有“只取 10
+            <a class="read-more" href="/2026/11/09/DailyJournal-1109-2/"> ... </a>
+        </div>
+        <div class="post-date">2026.11.09</div>
+    </div>
+    
+    <div class="post">
         <a class="post-title" href="/2026/11/05/DailyJournal-1105-2/">DailyJournal_1105</a>
         <div class="post-except">
             感觉每天的动作都很变形，这样不好，真的要开始找下家了吗，不想一直心怀愧疚的干下去啊，这压力得多大啊
@@ -149,16 +158,6 @@ issue 发出去有人认领
             <a class="read-more" href="/2025/12/18/DailyJournal-1218/"> ... </a>
         </div>
         <div class="post-date">2025.12.18</div>
-    </div>
-    
-    <div class="post">
-        <a class="post-title" href="/2025/12/15/DailyJournal-1215/">DailyJournal_1215</a>
-        <div class="post-except">
-            我其实一点都不饿，但是我的口腔里好空虚，还是点点儿东西咪西一下吧明天要汇报，我好害怕，感觉做的很糟糕，但是我也没有什么好的办法，只能硬着头皮上了
-
-            <a class="read-more" href="/2025/12/15/DailyJournal-1215/"> ... </a>
-        </div>
-        <div class="post-date">2025.12.15</div>
     </div>
     
 </div>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+    <head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+  <meta name="robots" content="index, follow">
+  <!-- title -->
+  
+    
+  <title>MySQL延迟关联的原理讲解与实例 - Alex 的生活日志</title>
+    
+  
+  
+  <!-- open graph -->
+  <meta name="description" content="延迟关联的本质是把「回表」这一动作推迟到最后：内层子查询只在索引上完成扫描、排序和分页，只产出 10 个主键；外层再拿这 10 个主键做等值查询取整行，于是回表从 100 万次降到 10 次。问题出在哪里：limit 1000000, 10 并没有“只取 10 行”MySQL 执行带大 offset 的 limit 时，会先按顺序生成前 1000010 条记录，再把前 1000000 条丢掉。关键">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL延迟关联的原理讲解与实例">
+<meta property="og:url" content="https://hexo.ismyh.cn/2026/11/09/DailyJournal-1109-2/index.html">
+<meta property="og:site_name" content="Alex 的生活日志">
+<meta property="og:description" content="延迟关联的本质是把「回表」这一动作推迟到最后：内层子查询只在索引上完成扫描、排序和分页，只产出 10 个主键；外层再拿这 10 个主键做等值查询取整行，于是回表从 100 万次降到 10 次。问题出在哪里：limit 1000000, 10 并没有“只取 10 行”MySQL 执行带大 offset 的 limit 时，会先按顺序生成前 1000010 条记录，再把前 1000000 条丢掉。关键">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-11-09T01:51:29.000Z">
+<meta property="article:modified_time" content="2026-11-09T01:51:41.619Z">
+<meta property="article:author" content="Alex_yehui">
+<meta property="article:tag" content="日记,生活记录,个人博客,骑行,工作日常">
+<meta name="twitter:card" content="summary">
+  <!-- canonical -->
+  
+  <link rel="canonical" href="https://hexo.ismyh.cn/2026/11/09/DailyJournal-1109-2/">
+  
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="/img/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/reset.css?v=20260505b">
+  <link rel="stylesheet" href="/css/style.css?v=20260505b">
+  <link rel="stylesheet" href="/css/markdown-20260505b.css">
+  <link rel="stylesheet" href="/css/fonts.css?v=20260505b">
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+    <body>
+        <div class="paper">
+            <div class="paper-main">
+                
+                    <div class="post-header">
+    <a class="logo" href="/">Alex 的生活日志</a>
+    <!-- <div class="logo"><a href="/" title="Len"><img src="/img/logo.svg" alt="Len" aria-label="logo" height="20"></a></div> -->
+        <ul class="nav">
+            
+            <li><a href="/">Home</a></li>
+            
+            <li><a href="/about">About</a></li>
+            
+            <li><a href="/guestbook">Guestbook</a></li>
+            
+            <li><a href="/archives">Archives</a></li>
+            
+        </ul>
+
+
+    </a>
+</div>
+
+                
+                <div class="post-main">
+    
+        <!-- 引入必要的CSS和JS库 -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script>
+        <div class="post-main-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <h1 style="margin: 0; flex: 1; min-width: 200px;">MySQL延迟关联的原理讲解与实例</h1>
+        </div>
+        <!-- 分享按钮区 -->
+        <div class="share-component" 
+             data-sites="weibo,facebook"
+             data-weibo-title="MySQL延迟关联的原理讲解与实例"
+             data-url="https://hexo.ismyh.cn/2026/11/09/DailyJournal-1109-2/">
+        </div>
+        <div class="post-meta">
+            2026-11-09 09:51:29 ｜ 
+            
+        </div>
+        <!-- 圆角分类 -->
+        <div class="tags">
+            
+        </div>
+        <div class="post-md">
+            <h3 id="延迟关联的本质是把「回表」这一动作推迟到最后：内层子查询只在索引上完成扫描、排序和分页，只产出-10-个主键；外层再拿这-10-个主键做等值查询取整行，于是回表从-100-万次降到-10-次。"><a href="#延迟关联的本质是把「回表」这一动作推迟到最后：内层子查询只在索引上完成扫描、排序和分页，只产出-10-个主键；外层再拿这-10-个主键做等值查询取整行，于是回表从-100-万次降到-10-次。" class="headerlink" title="延迟关联的本质是把「回表」这一动作推迟到最后：内层子查询只在索引上完成扫描、排序和分页，只产出 10 个主键；外层再拿这 10 个主键做等值查询取整行，于是回表从 100 万次降到 10 次。"></a><strong>延迟关联的本质是把「回表」这一动作推迟到最后：内层子查询只在索引上完成扫描、排序和分页，只产出 10 个主键；外层再拿这 10 个主键做等值查询取整行，于是回表从 100 万次降到 10 次。</strong></h3><h3 id="问题出在哪里：limit-1000000-10-并没有“只取-10-行”"><a href="#问题出在哪里：limit-1000000-10-并没有“只取-10-行”" class="headerlink" title="问题出在哪里：limit 1000000, 10 并没有“只取 10 行”"></a><strong>问题出在哪里：<code>limit 1000000, 10</code> 并没有“只取 10 行”</strong></h3><p>MySQL 执行带大 offset 的 <code>limit</code> 时，会先按顺序<strong>生成</strong>前 1000010 条记录，再把前 1000000 条丢掉。关键在于“生成”这个动作：如果你写的是 <code>select *</code>，那么每生成一行，InnoDB 都要完成一次回表。</p>
+<p>InnoDB 的二级索引叶子节点里只存「索引列 + 主键」，不存其他列。所以 <code>where status=1 order by created_at</code> 这类查询能靠索引定位到行，但要拿到 <code>amount</code>、<code>remark</code> 这些字段，必须拿着主键再回聚簇索引查一次整行，这就是回表。100 万次回表意味着访问 100 万个聚簇索引页，每页 16KB，而你真正需要的只有最后 10 行的几十个字节。如果排序走的是 <code>created_at</code> 这种非主键列，主键在二级索引里是乱序的，回表就是彻底的随机 IO，代价再翻几倍。</p>
+<p>普通写法的执行过程是这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    A1[&quot;二级索引上顺序扫描&quot;] --&gt; A2[&quot;每命中一行&lt;br/&gt;回表取整行&quot;]</span><br><span class="line">    A2 --&gt; A3[&quot;累计 100 万次回表&quot;]</span><br><span class="line">    A3 --&gt; A4[&quot;丢弃前 1000000 行&quot;]</span><br><span class="line">    A4 --&gt; A5[&quot;返回最后 10 行&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>99.999% 的回表是一次性开销，纯属浪费。</p>
+<h3 id="延迟关联怎么绕开它"><a href="#延迟关联怎么绕开它" class="headerlink" title="延迟关联怎么绕开它"></a><strong>延迟关联怎么绕开它</strong></h3><p>改成你贴的写法后，执行被切成两段：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> t.<span class="operator">*</span></span><br><span class="line"><span class="keyword">from</span> t</span><br><span class="line"><span class="keyword">join</span> (</span><br><span class="line">    <span class="keyword">select</span> id <span class="keyword">from</span> t</span><br><span class="line">    <span class="keyword">where</span> status <span class="operator">=</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">order</span> <span class="keyword">by</span> id</span><br><span class="line">    limit <span class="number">1000000</span>, <span class="number">10</span></span><br><span class="line">) x <span class="keyword">on</span> t.id <span class="operator">=</span> x.id;</span><br></pre></td></tr></table></figure>
+
+<p>内层 <code>select id</code> 是一个<strong>覆盖索引</strong>查询。因为 <code>id</code> 就是主键，而二级索引天生带主键，所以 <code>(status)</code> 这个索引就能满足内层全部需求，Extra 里会出现 <code>Using index</code>，全过程不回表。它要扫描 1000010 个索引项，但每个索引项只有几十字节，纯顺序读，量级大概是几十 MB；而优化前是 100 万次页访问，量级上千 MB 且大概率随机。</p>
+<p>拿到这 10 个 id 之后，外层 <code>on t.id = x.id</code> 是主键等值查找，执行计划里是 <code>eq_ref</code>，每次都是一次 B+ 树下降，成本可以忽略。这就是“延迟”两个字的含义：把最贵的整行读取，延后到结果集已经缩小到 10 行的时候再做。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    B1[&quot;内层：覆盖索引扫描&lt;br/&gt;1000010 个索引项&lt;br/&gt;不回表&quot;] --&gt; B2[&quot;排序 + 截取&lt;br/&gt;得到 10 个 id&quot;]</span><br><span class="line">    B2 --&gt; B3[&quot;外层：10 次主键 eq_ref&lt;br/&gt;精确回表&quot;]</span><br><span class="line">    B3 --&gt; B4[&quot;返回 10 行完整数据&quot;]</span><br></pre></td></tr></table></figure>
+
+<h3 id="三个必须满足的前提"><a href="#三个必须满足的前提" class="headerlink" title="三个必须满足的前提"></a><strong>三个必须满足的前提</strong></h3><p>这套优化不是无条件生效的，缺一条就会被打回原形。</p>
+<p>第一，<strong>内层必须是覆盖索引扫描</strong>。也就是 <code>where</code> 条件列和 <code>order by</code> 列要落在同一个索引里，并且 <code>select</code> 列表里只能出现索引里已有的列（这里就是 <code>id</code>）。如果写成 <code>select *</code>，子查询本身就要回表，优化完全消失，MySQL 不会替你改写。</p>
+<p>第二，<strong>排序要走索引顺序，不能 filesort</strong>。以 <code>where status = 1 order by id</code> 为例，InnoDB 二级索引 <code>(status)</code> 的物理顺序其实是 <code>(status, id)</code>，所以 <code>status</code> 取等值后 <code>id</code> 天然有序，可以直接顺着索引读，不需要额外排序。但如果你写成 <code>order by created_at</code> 而索引是 <code>(status)</code>，就会触发 filesort，内层虽然不回表，却要把所有满足条件的 id 读进排序缓冲区甚至临时文件再排，内存和 CPU 开销可能反过来超过回表。</p>
+<p>第三，<strong><code>where</code> 条件要能被索引有效过滤</strong>。如果 <code>status</code> 上没有索引，或者条件选择性极差（比如 99% 的行都满足），内层扫描量依然是全表级别，延迟关联只能省掉回表，省不掉扫描。</p>
+<p>用 <code>EXPLAIN</code> 验证时，两段应该长这样：</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>type</th>
+<th>rows</th>
+<th>Extra</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>内层 derived</td>
+<td>index</td>
+<td>1000010</td>
+<td>Using where; Using index</td>
+</tr>
+<tr>
+<td>外层 t</td>
+<td>eq_ref</td>
+<td>10</td>
+<td>NULL</td>
+</tr>
+</tbody></table>
+<p>只要内层的 Extra 里没有 <code>Using index</code>，说明覆盖索引没成立，需要补索引或调整 <code>select</code> 列表。</p>
+<h3 id="它的天花板在哪里"><a href="#它的天花板在哪里" class="headerlink" title="它的天花板在哪里"></a><strong>它的天花板在哪里</strong></h3><p>延迟关联降低的是<strong>回表的次数</strong>，但没有降低<strong>扫描的深度</strong>。内层依然要顺着索引走过 offset + limit 条记录，复杂度还是 O(offset)。offset 到一千万时，即使全程覆盖索引，一千万次索引项读取和 B+ 树页跳转也不会便宜，只是比回表便宜一个数量级而已。</p>
+<p>所以真正深的分页，更彻底的解法是<strong>游标分页（keyset pagination）</strong>：把“第几页”换成“上一页最后一行的位置”，<code>where status = 1 and id &gt; :last_id order by id limit 10</code>。这样 B+ 树直接 seek 到起点，复杂度是 O(limit)，与页码无关，代价恒定。代价是不能随机跳页，只适合“下一页 &#x2F; 滚动加载”这类交互。</p>
+<p>实践中常见的取舍是：后台管理系统需要跳到第 5000 页，用延迟关联；面向用户的列表只做“加载更多”，用游标分页；两者都撑不住时，才考虑把这份查询搬到搜索引擎或做冷热分离。延迟关联的定位很清楚：它是一个<strong>低成本、不改业务语义、只改 SQL 形态</strong>的中间档优化，尤其适合你已经有合适索引、只是不想为了分页去建一个超宽覆盖索引的场景。</p>
+
+        </div>
+        <!-- 评论系统 -->
+        <div class="post-comments" style="width: 100%; box-sizing: border-box; margin-top: 3em; padding: 1.5em; background: #f9f9f9; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <h3 style="text-align: center; margin-bottom: 1.5em; color: #333; font-weight: 600;">评论区</h3>
+            <div style="max-width: 100%; overflow: hidden; border-radius: 4px;">
+                <script src="https://utteranc.es/client.js"
+                        repo="AKAama/Comments"
+                        issue-term="pathname"
+                        theme="github-light"
+                        crossorigin="anonymous"
+                        async>
+                </script>
+            </div>
+        </div>
+    
+<!-- tags -->
+
+</div>
+                <div class="footer">
+    <span>Copyright © <script>document.write(new Date().getFullYear())</script> Alex 的生活日志</span>
+    <span>Powered by <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a> with <a target="_blank" rel="noopener" href="https://imzl.com/zenmind">ZenMind</a></span>
+</div>
+<link rel="stylesheet" href="/css/a11y-dark.min.css?v=20260505b">
+
+<script src="/js/highlight.min.js"></script>
+
+
+<script src="/js/highlightjs-line-numbers.js"></script>
+
+<script>
+    hljs.initHighlightingOnLoad();
+    hljs.initLineNumbersOnLoad();
+</script>
+
+            </div>
+        </div>
+    </body>
+</html>
